@@ -1,0 +1,138 @@
+<title>Mis Ángeles Guardianes</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Layout: una columna tipo página de agenda; formulario arriba, tres guardianes en fila (apilados en móvil), ángel de hoy al final */
+:root{
+  --bg:#F6F1E7; --paper:#FCFAF4; --ink:#2F3324; --soft:#62654F; --line:#DCD5C3;
+  --olive:#4F5B2E; --gold:#A8842F; --sage:#E8E9D6; --onolive:#F6F1E7;
+  --display:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --body:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#1B1E15; --paper:#23271C; --ink:#ECE7D8; --soft:#B4B29E; --line:#3A3F2E;
+  --olive:#B9C48E; --gold:#D8B867; --sage:#2C3222; --onolive:#1B1E15; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#1B1E15; --paper:#23271C; --ink:#ECE7D8; --soft:#B4B29E; --line:#3A3F2E;
+  --olive:#B9C48E; --gold:#D8B867; --sage:#2C3222; --onolive:#1B1E15; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 48px}
+.wrap{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+.eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(34px,6vw,52px);line-height:1.05;color:var(--olive);margin:6px 0 8px;text-wrap:balance}
+.lead{font-family:var(--display);font-style:italic;font-size:19px;color:var(--soft);margin:0;max-width:62ch}
+form{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end}
+.field{display:flex;flex-direction:column;gap:6px}
+label{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--olive);font-weight:600}
+input,select{font:inherit;font-size:17px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-width:0}
+input:focus-visible,select:focus-visible,button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+#d{width:74px} #y{width:100px} #m{width:150px}
+button{font:inherit;font-weight:600;background:var(--olive);color:var(--onolive);border:0;border-radius:10px;padding:12px 20px;cursor:pointer}
+button:hover{filter:brightness(1.08)}
+.status{flex-basis:100%;font-size:13px;color:var(--soft);margin:0}
+.status.err{color:#B4483A}
+.example{display:inline-block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;background:var(--sage);color:var(--olive);padding:3px 9px;border-radius:99px;font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+@media (max-width:760px){.grid{grid-template-columns:1fr}}
+.card{background:var(--paper);border:1px solid var(--line);border-top:3px solid var(--gold);border-radius:0 0 14px 14px;padding:20px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.card .k{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600}
+.num{font-family:var(--display);font-weight:600;font-size:56px;line-height:1;color:var(--olive);font-variant-numeric:tabular-nums}
+.name{font-family:var(--display);font-weight:600;font-size:28px;line-height:1.1;color:var(--olive)}
+.q{font-family:var(--display);font-style:italic;font-size:17px;color:var(--soft)}
+.how{font-size:13px;color:var(--soft);background:var(--sage);border-radius:8px;padding:8px 10px;font-variant-numeric:tabular-nums}
+.meta{font-size:13px;color:var(--soft);display:flex;flex-direction:column;gap:2px}
+.meta b{color:var(--ink);font-weight:500}
+.clave{font-family:var(--display);font-style:italic;font-weight:600;font-size:18px;color:var(--ink);border-top:1px solid var(--line);padding-top:10px;margin-top:auto}
+.clave small{display:block;font-family:var(--body);font-style:normal;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:4px}
+.badge{align-self:flex-start;font-size:11px;font-weight:600;color:var(--olive);border:1px solid var(--line);border-radius:99px;padding:3px 10px}
+.today{display:flex;gap:18px;align-items:center;flex-wrap:wrap;background:var(--olive);color:var(--onolive);border-radius:14px;padding:20px 22px}
+.today .num{color:var(--onolive);font-size:44px}
+.today .t{min-width:0;flex:1}
+.today .k{font-size:11px;letter-spacing:.18em;text-transform:uppercase;opacity:.75;font-weight:600}
+.today .name{color:var(--onolive);font-size:26px}
+.today p{margin:2px 0 0;font-family:var(--display);font-style:italic;font-size:17px;opacity:.9}
+.tip{font-size:14px;color:var(--soft);margin:0;max-width:70ch}
+@media (prefers-reduced-motion:no-preference){.card{transition:transform .2s}.card.flash{animation:f .5s ease}@keyframes f{from{transform:translateY(6px)}to{transform:none}}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Día a día con los ángeles · Calculadora</div>
+    <h1>Descubre tus 3 ángeles guardianes</h1>
+    <p class="lead">Escribe tu fecha de nacimiento y conoce al ángel de tu nacimiento, al de tu edad y al de tu vida, con la página de tu agenda donde está su mensaje.</p>
+  </header>
+
+  <form id="f" novalidate>
+    <div class="field"><label for="d">Día</label><input id="d" type="number" inputmode="numeric" min="1" max="31" value="15"></div>
+    <div class="field"><label for="m">Mes</label><select id="m"></select></div>
+    <div class="field"><label for="y">Año</label><input id="y" type="number" inputmode="numeric" min="1900" max="2100" value="1990"></div>
+    <button type="submit">Ver mis ángeles</button>
+    <p class="status" id="st"><span class="example">Ejemplo</span> Carmen, nacida el 15 de febrero de 1990 (el ejemplo de la clase). El ángel de la edad se calcula con la fecha de hoy. Cambia la fecha por la tuya.</p>
+  </form>
+
+  <section class="grid" id="g" aria-live="polite"></section>
+
+  <section class="today" id="today"></section>
+
+  <p class="tip"><b>Recuerda:</b> trabaja con un ángel a la vez. Empieza por el de tu nacimiento y, cuando sientas fluida esa conexión, suma los otros dos. El ángel de la edad cambia cada año, el día de tu cumpleaños.</p>
+</div>
+
+<script>
+const A = [{"n":1,"nm":"Vehuiah","r":[3,21,3,25],"rg":"21 al 25 de marzo","q":"Ángel de la voluntad y los nuevos comienzos","k":"Inicio con alegría y la energía divina impulsa cada uno de mis pasos.","c":"Serafines","ar":"Metatrón","p":10},{"n":2,"nm":"Jeliel","r":[3,26,3,30],"rg":"26 al 30 de marzo","q":"Ángel del amor y la fidelidad","k":"Vivo el amor con fidelidad: hacia mí y hacia quienes elijo amar.","c":"Serafines","ar":"Metatrón","p":11},{"n":3,"nm":"Sitael","r":[3,31,4,4],"rg":"31 de marzo al 4 de abril","q":"Ángel de la expansión y la construcción","k":"Construyo mi vida con firmeza y cada experiencia me hace crecer.","c":"Serafines","ar":"Metatrón","p":12},{"n":4,"nm":"Elemiah","r":[4,5,4,9],"rg":"5 al 9 de abril","q":"Ángel del rumbo y el éxito profesional","k":"Conozco mi rumbo y avanzo con seguridad hacia mi propósito.","c":"Serafines","ar":"Metatrón","p":13},{"n":5,"nm":"Mahasiah","r":[4,10,4,14],"rg":"10 al 14 de abril","q":"Ángel del aprendizaje y la paz interior","k":"Aprendo con facilidad y vivo en paz con mi historia.","c":"Serafines","ar":"Metatrón","p":14},{"n":6,"nm":"Lelahel","r":[4,15,4,20],"rg":"15 al 20 de abril","q":"Ángel de la luz, el arte y la sanación","k":"Mi luz interior embellece todo lo que toco.","c":"Serafines","ar":"Metatrón","p":15},{"n":7,"nm":"Achaiah","r":[4,21,4,25],"rg":"21 al 25 de abril","q":"Ángel de la paciencia y los secretos de la naturaleza","k":"Confío en los tiempos divinos y florezco a mi ritmo.","c":"Serafines","ar":"Metatrón","p":16},{"n":8,"nm":"Cahetel","r":[4,26,4,30],"rg":"26 al 30 de abril","q":"Ángel de la bendición divina y la cosecha","k":"Mi trabajo está bendecido y recibo con gratitud cada cosecha.","c":"Serafines","ar":"Metatrón","p":17},{"n":9,"nm":"Haziel","r":[5,1,5,5],"rg":"1 al 5 de mayo","q":"Ángel de la misericordia y el perdón","k":"Perdono con amor y mi corazón se llena de paz.","c":"Querubines","ar":"Raziel","p":18},{"n":10,"nm":"Aladiah","r":[5,6,5,10],"rg":"6 al 10 de mayo","q":"Ángel de la gracia y la regeneración","k":"La gracia divina me renueva y me llena de vitalidad.","c":"Querubines","ar":"Raziel","p":19},{"n":11,"nm":"Lauviah","r":[5,11,5,15],"rg":"11 al 15 de mayo","q":"Ángel de la victoria y el reconocimiento","k":"Reconozco mi valor y celebro cada una de mis victorias.","c":"Querubines","ar":"Raziel","p":20},{"n":12,"nm":"Hahaiah","r":[5,16,5,20],"rg":"16 al 20 de mayo","q":"Ángel del refugio interior y los sueños","k":"En mi interior habita un refugio de paz y sabiduría.","c":"Querubines","ar":"Raziel","p":21},{"n":13,"nm":"Iezalel","r":[5,21,5,25],"rg":"21 al 25 de mayo","q":"Ángel de la amistad y la reconciliación","k":"Mis vínculos se fortalecen con lealtad, ternura y comprensión.","c":"Querubines","ar":"Raziel","p":22},{"n":14,"nm":"Mebahel","r":[5,26,5,31],"rg":"26 al 31 de mayo","q":"Ángel de la verdad y la justicia","k":"Vivo en la verdad y la justicia divina ordena mi vida.","c":"Querubines","ar":"Raziel","p":23},{"n":15,"nm":"Hariel","r":[6,1,6,5],"rg":"1 al 5 de junio","q":"Ángel de la purificación","k":"Purifico mi mente y mi espacio, y abro camino a lo nuevo.","c":"Querubines","ar":"Raziel","p":24},{"n":16,"nm":"Hekamiah","r":[6,6,6,10],"rg":"6 al 10 de junio","q":"Ángel de la lealtad y el liderazgo noble","k":"Lidero mi vida con nobleza, lealtad e integridad.","c":"Querubines","ar":"Raziel","p":25},{"n":17,"nm":"Lauviah","r":[6,11,6,15],"rg":"11 al 15 de junio","q":"Ángel de la revelación y la intuición","k":"Confío en mi intuición y comprendo los mensajes de mi alma.","c":"Tronos","ar":"Tsaphkiel","p":26},{"n":18,"nm":"Caliel","r":[6,16,6,21],"rg":"16 al 21 de junio","q":"Ángel de la verdad que se revela","k":"Veo con claridad y la verdad me trae paz.","c":"Tronos","ar":"Tsaphkiel","p":27},{"n":19,"nm":"Leuviah","r":[6,22,6,26],"rg":"22 al 26 de junio","q":"Ángel de la memoria y la inteligencia","k":"Mi mente es clara, recuerdo con facilidad y aprendo con alegría.","c":"Tronos","ar":"Tsaphkiel","p":28},{"n":20,"nm":"Pahaliah","r":[6,27,7,1],"rg":"27 de junio al 1 de julio","q":"Ángel de la vocación espiritual","k":"Vivo desde mi esencia divina y mi camino espiritual florece.","c":"Tronos","ar":"Tsaphkiel","p":29},{"n":21,"nm":"Nelchael","r":[7,2,7,6],"rg":"2 al 6 de julio","q":"Ángel del conocimiento y la ciencia","k":"Aprendo con entusiasmo y comparto con generosidad lo que sé.","c":"Tronos","ar":"Tsaphkiel","p":30},{"n":22,"nm":"Yeiayel","r":[7,7,7,11],"rg":"7 al 11 de julio","q":"Ángel de la fortuna y la diplomacia","k":"La buena fortuna me acompaña y mis acuerdos son armoniosos.","c":"Tronos","ar":"Tsaphkiel","p":31},{"n":23,"nm":"Melahel","r":[7,12,7,16],"rg":"12 al 16 de julio","q":"Ángel de las plantas y la armonía natural","k":"Vivo en armonía con la naturaleza y ella me llena de bienestar.","c":"Tronos","ar":"Tsaphkiel","p":32},{"n":24,"nm":"Haheuiah","r":[7,17,7,22],"rg":"17 al 22 de julio","q":"Ángel del amparo y la protección","k":"Estoy amparada por la luz divina y me siento segura.","c":"Tronos","ar":"Tsaphkiel","p":33},{"n":25,"nm":"Nith-Haiah","r":[7,23,7,27],"rg":"23 al 27 de julio","q":"Ángel de la sabiduría y los misterios","k":"Me abro a la sabiduría sagrada y comprendo las señales del universo.","c":"Dominaciones","ar":"Zadquiel","p":34},{"n":26,"nm":"Haaiah","r":[7,28,8,1],"rg":"28 de julio al 1 de agosto","q":"Ángel de la diplomacia y la contemplación","k":"Actúo desde la calma y soy puente de armonía.","c":"Dominaciones","ar":"Zadquiel","p":35},{"n":27,"nm":"Yerathel","r":[8,2,8,6],"rg":"2 al 6 de agosto","q":"Ángel de la luz divina","k":"Soy portadora de luz divina e ilumino cada lugar al que llego.","c":"Dominaciones","ar":"Zadquiel","p":36},{"n":28,"nm":"Seheiah","r":[8,7,8,12],"rg":"7 al 12 de agosto","q":"Ángel de la longevidad y el bienestar","k":"Honro mi cuerpo y vivo con plenitud, vitalidad y bienestar.","c":"Dominaciones","ar":"Zadquiel","p":37},{"n":29,"nm":"Reiyel","r":[8,13,8,17],"rg":"13 al 17 de agosto","q":"Ángel de la liberación y la inspiración","k":"Me libero con amor y la inspiración divina fluye en mí.","c":"Dominaciones","ar":"Zadquiel","p":38},{"n":30,"nm":"Omael","r":[8,18,8,22],"rg":"18 al 22 de agosto","q":"Ángel de la fecundidad y la multiplicación","k":"Todo lo que cuido con amor crece y se multiplica.","c":"Dominaciones","ar":"Zadquiel","p":39},{"n":31,"nm":"Lecabel","r":[8,23,8,28],"rg":"23 al 28 de agosto","q":"Ángel del talento y las soluciones","k":"Mi mente encuentra soluciones creativas y mis talentos brillan.","c":"Dominaciones","ar":"Zadquiel","p":40},{"n":32,"nm":"Vasariah","r":[8,29,9,2],"rg":"29 de agosto al 2 de septiembre","q":"Ángel de la clemencia y la bondad","k":"Soy bondadosa conmigo y con los demás; mis palabras construyen.","c":"Dominaciones","ar":"Zadquiel","p":41},{"n":33,"nm":"Yehuiah","r":[9,3,9,7],"rg":"3 al 7 de septiembre","q":"Ángel del orden superior y el liderazgo consciente","k":"Estoy alineada con el plan divino y todo fluye en mi vida.","c":"Potestades","ar":"Chamuel","p":42},{"n":34,"nm":"Lehahiah","r":[9,8,9,12],"rg":"8 al 12 de septiembre","q":"Ángel del orden y la serenidad","k":"Vivo en serenidad y mi vida se ordena con armonía.","c":"Potestades","ar":"Chamuel","p":43},{"n":35,"nm":"Chavakiah","r":[9,13,9,17],"rg":"13 al 17 de septiembre","q":"Ángel de la reconciliación","k":"Me reconcilio con mi historia y con las personas que amo.","c":"Potestades","ar":"Chamuel","p":44},{"n":36,"nm":"Menadel","r":[9,18,9,23],"rg":"18 al 23 de septiembre","q":"Ángel del trabajo y la vocación","k":"Mi trabajo expresa mi vocación y es valorado y próspero.","c":"Potestades","ar":"Chamuel","p":45},{"n":37,"nm":"Aniel","r":[9,24,9,28],"rg":"24 al 28 de septiembre","q":"Ángel de los nuevos ciclos","k":"Elijo desde la conciencia y abro ciclos nuevos llenos de luz.","c":"Potestades","ar":"Chamuel","p":46},{"n":38,"nm":"Haamiah","r":[9,29,10,3],"rg":"29 de septiembre al 3 de octubre","q":"Ángel del ritual y la conexión sagrada","k":"Vivo cada momento como un ritual sagrado de conexión.","c":"Potestades","ar":"Chamuel","p":47},{"n":39,"nm":"Rehael","r":[10,4,10,8],"rg":"4 al 8 de octubre","q":"Ángel de los vínculos familiares y el bienestar","k":"Mi familia vive en armonía, respeto y amor.","c":"Potestades","ar":"Chamuel","p":48},{"n":40,"nm":"Ieiazel","r":[10,9,10,13],"rg":"9 al 13 de octubre","q":"Ángel del consuelo y la creatividad","k":"Mi corazón encuentra consuelo y transforma lo que siente en creación.","c":"Potestades","ar":"Chamuel","p":49},{"n":41,"nm":"Hahahel","r":[10,14,10,18],"rg":"14 al 18 de octubre","q":"Ángel de la misión de vida","k":"Reconozco mi misión de vida y la vivo con alegría y compromiso.","c":"Virtudes","ar":"Rafael","p":50},{"n":42,"nm":"Mikael","r":[10,19,10,23],"rg":"19 al 23 de octubre","q":"Ángel del orden y el discernimiento","k":"Discierno con claridad y elijo lo que me eleva.","c":"Virtudes","ar":"Rafael","p":51},{"n":43,"nm":"Veuliah","r":[10,24,10,28],"rg":"24 al 28 de octubre","q":"Ángel de la prosperidad","k":"Merezco prosperar y la riqueza fluye en mi vida con facilidad.","c":"Virtudes","ar":"Rafael","p":52},{"n":44,"nm":"Yelahiah","r":[10,29,11,2],"rg":"29 de octubre al 2 de noviembre","q":"Ángel de la valentía y la justicia","k":"Actúo con valentía y la justicia divina me acompaña.","c":"Virtudes","ar":"Rafael","p":53},{"n":45,"nm":"Sealiah","r":[11,3,11,7],"rg":"3 al 7 de noviembre","q":"Ángel de la voluntad y la vitalidad","k":"Mi voluntad es firme y mi cuerpo vibra con vitalidad.","c":"Virtudes","ar":"Rafael","p":54},{"n":46,"nm":"Ariel","r":[11,8,11,12],"rg":"8 al 12 de noviembre","q":"Ángel de las revelaciones y los descubrimientos","k":"Descubro con alegría las respuestas y los dones que la vida me revela.","c":"Virtudes","ar":"Rafael","p":55},{"n":47,"nm":"Asaliah","r":[11,13,11,17],"rg":"13 al 17 de noviembre","q":"Ángel de la contemplación y la verdad","k":"Contemplo la belleza de la vida y comprendo la verdad divina.","c":"Virtudes","ar":"Rafael","p":56},{"n":48,"nm":"Mihael","r":[11,18,11,22],"rg":"18 al 22 de noviembre","q":"Ángel de la fertilidad y la paz conyugal","k":"Mi relación de pareja florece en armonía, fidelidad y ternura.","c":"Virtudes","ar":"Rafael","p":57},{"n":49,"nm":"Vehuel","r":[11,23,11,27],"rg":"23 al 27 de noviembre","q":"Ángel de la grandeza y la elevación","k":"Elevo mis pensamientos y vivo desde la grandeza de mi alma.","c":"Principados","ar":"Haniel","p":58},{"n":50,"nm":"Daniel","r":[11,28,12,2],"rg":"28 de noviembre al 2 de diciembre","q":"Ángel de la elocuencia y la misericordia","k":"Me expreso con claridad y amor; mis palabras abren caminos.","c":"Principados","ar":"Haniel","p":59},{"n":51,"nm":"Hahasiah","r":[12,3,12,7],"rg":"3 al 7 de diciembre","q":"Ángel de la medicina universal y la sabiduría","k":"La sabiduría divina armoniza mi cuerpo, mi mente y mi espíritu.","c":"Principados","ar":"Haniel","p":60},{"n":52,"nm":"Imamiah","r":[12,8,12,12],"rg":"8 al 12 de diciembre","q":"Ángel de la libertad y el apoyo en el camino","k":"Camino ligera y libre, sostenida por la luz divina.","c":"Principados","ar":"Haniel","p":61},{"n":53,"nm":"Nanael","r":[12,13,12,16],"rg":"13 al 16 de diciembre","q":"Ángel de la comunicación espiritual","k":"Me comunico con lo divino y comparto con amor lo que recibo.","c":"Principados","ar":"Haniel","p":62},{"n":54,"nm":"Nithael","r":[12,17,12,21],"rg":"17 al 21 de diciembre","q":"Ángel de la eterna juventud","k":"Mi espíritu es eternamente joven y vivo con alegría e ilusión.","c":"Principados","ar":"Haniel","p":63},{"n":55,"nm":"Mebahiah","r":[12,22,12,26],"rg":"22 al 26 de diciembre","q":"Ángel de la lucidez y los valores","k":"Vivo según mis valores y mi ejemplo inspira a otros.","c":"Principados","ar":"Haniel","p":64},{"n":56,"nm":"Poyel","r":[12,27,12,31],"rg":"27 al 31 de diciembre","q":"Ángel de la fortuna y la generosidad","k":"Agradezco lo vivido y recibo con generosidad las bendiciones que llegan.","c":"Principados","ar":"Haniel","p":65},{"n":57,"nm":"Nemamiah","r":[1,1,1,5],"rg":"1 al 5 de enero","q":"Ángel del discernimiento y el propósito","k":"Tengo claro mi propósito y avanzo con determinación hacia mis metas.","c":"Arcángeles","ar":"Miguel","p":66},{"n":58,"nm":"Yeialel","r":[1,6,1,10],"rg":"6 al 10 de enero","q":"Ángel de la fortaleza mental","k":"Mi mente es fuerte, serena y llena de pensamientos amorosos.","c":"Arcángeles","ar":"Miguel","p":67},{"n":59,"nm":"Harahel","r":[1,11,1,15],"rg":"11 al 15 de enero","q":"Ángel de la riqueza intelectual","k":"Aprendo con alegría y mi conocimiento enriquece mi vida.","c":"Arcángeles","ar":"Miguel","p":68},{"n":60,"nm":"Mitzrael","r":[1,16,1,20],"rg":"16 al 20 de enero","q":"Ángel de la armonía mental","k":"Mi mente vive en armonía y mi interior está en paz.","c":"Arcángeles","ar":"Miguel","p":69},{"n":61,"nm":"Umabel","r":[1,21,1,25],"rg":"21 al 25 de enero","q":"Ángel de la amistad y la afinidad","k":"Atraigo amistades verdaderas que vibran con mi alma.","c":"Arcángeles","ar":"Miguel","p":70},{"n":62,"nm":"Iah-Hel","r":[1,26,1,30],"rg":"26 al 30 de enero","q":"Ángel de la sabiduría interior","k":"Disfruto mi propia compañía y escucho mi sabiduría interior.","c":"Arcángeles","ar":"Miguel","p":71},{"n":63,"nm":"Anauel","r":[1,31,2,4],"rg":"31 de enero al 4 de febrero","q":"Ángel de la unidad y la prosperidad","k":"Prospero desde la unidad y mi bienestar bendice a todos.","c":"Arcángeles","ar":"Miguel","p":72},{"n":64,"nm":"Mehiel","r":[2,5,2,9],"rg":"5 al 9 de febrero","q":"Ángel de la inspiración y la escritura","k":"La inspiración divina fluye a través de mí y doy vida a mis ideas.","c":"Arcángeles","ar":"Miguel","p":73},{"n":65,"nm":"Damabiah","r":[2,10,2,14],"rg":"10 al 14 de febrero","q":"Ángel de la fuente de sabiduría","k":"Fluyo con sabiduría y mis proyectos llegan a buen puerto.","c":"Ángeles","ar":"Gabriel","p":74},{"n":66,"nm":"Manakel","r":[2,15,2,19],"rg":"15 al 19 de febrero","q":"Ángel del conocimiento","k":"Agradezco este momento: fluyo con la energía divina y sirvo con amor.","c":"Ángeles","ar":"Gabriel","p":75},{"n":67,"nm":"Eyael","r":[2,20,2,24],"rg":"20 al 24 de febrero","q":"Ángel de la transformación","k":"Transformo cada experiencia en sabiduría y renazco cada día.","c":"Ángeles","ar":"Gabriel","p":76},{"n":68,"nm":"Habuhiah","r":[2,25,2,29],"rg":"25 al 29 de febrero","q":"Ángel del bienestar y la naturaleza","k":"La naturaleza me llena de bienestar y mi cuerpo vive en equilibrio.","c":"Ángeles","ar":"Gabriel","p":77},{"n":69,"nm":"Rochel","r":[3,1,3,5],"rg":"1 al 5 de marzo","q":"Ángel de lo que regresa a ti","k":"Todo lo que me pertenece por derecho divino llega a mí.","c":"Ángeles","ar":"Gabriel","p":78},{"n":70,"nm":"Jabamiah","r":[3,6,3,10],"rg":"6 al 10 de marzo","q":"Ángel de la alquimia interior","k":"El amor divino transforma todo en mí en luz y sabiduría.","c":"Ángeles","ar":"Gabriel","p":79},{"n":71,"nm":"Haiaiel","r":[3,11,3,15],"rg":"11 al 15 de marzo","q":"Ángel de la fuerza y la valentía","k":"Camino con fuerza, valentía y serenidad, envuelta en luz divina.","c":"Ángeles","ar":"Gabriel","p":80},{"n":72,"nm":"Mumiah","r":[3,16,3,20],"rg":"16 al 20 de marzo","q":"Ángel del renacimiento","k":"Cierro ciclos con gratitud y renazco a una vida nueva.","c":"Ángeles","ar":"Gabriel","p":81}];
+const MES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+const $ = id => document.getElementById(id);
+MES.forEach((m,i)=>{const o=document.createElement("option");o.value=i+1;o.textContent=m[0].toUpperCase()+m.slice(1);if(i===1)o.selected=true;$("m").appendChild(o)});
+
+function byDate(m,d){
+  const x=m*100+d;
+  return A.find(a=>{const s=a.r[0]*100+a.r[1], e=a.r[2]*100+a.r[3]; return s<=e ? (x>=s&&x<=e) : (x>=s||x<=e)});
+}
+function age(d,m,y,t){let a=t.getFullYear()-y; if(t.getMonth()+1<m||(t.getMonth()+1===m&&t.getDate()<d))a--; return a;}
+function esc(s){return String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]))}
+
+function card(kind,a,how,extra){
+  return `<article class="card flash">
+    <div class="k">${kind}</div><div class="num">${a.n}</div><div class="name">${esc(a.nm)}</div>
+    <div class="q">${esc(a.q)}</div>
+    <div class="how">${how}</div>
+    <div class="meta"><span>Rige: <b>${esc(a.rg)}</b></span><span>Coro: <b>${esc(a.c)}</b> · Arcángel: <b>${esc(a.ar)}</b></span></div>
+    ${extra||""}
+    <span class="badge">En tu agenda: página ${a.p}</span>
+    <div class="clave"><small>Clave para despertar su energía</small>«${esc(a.k)}»</div>
+  </article>`;
+}
+
+function run(ev){
+  if(ev) ev.preventDefault();
+  const d=+$("d").value, m=+$("m").value, y=+$("y").value, st=$("st");
+  const dt=new Date(y,m-1,d), today=new Date();
+  if(!d||!y||dt.getMonth()!==m-1||dt.getDate()!==d||y<1900){st.className="status err";st.textContent="Revisa la fecha: ese día no existe en ese mes. Escribe el día con números (por ejemplo, 15).";return;}
+  if(dt>today){st.className="status err";st.textContent="La fecha de nacimiento tiene que ser anterior a hoy.";return;}
+  if(ev){st.className="status";st.textContent=`Ángeles guardianes para quien nació el ${d} de ${MES[m-1]} de ${y}.`;}
+
+  const a1=byDate(m,d);
+  const ag=age(d,m,y,today);
+  const digits=(String(d).padStart(2,"0")+String(m).padStart(2,"0")+String(y)).split("").map(Number);
+  const sum=digits.reduce((s,x)=>s+x,0);
+  let html=card("1 · Ángel de tu nacimiento",a1,`Naciste el ${d} de ${MES[m-1]}, dentro de su rango.`);
+  if(ag<1){
+    html+=`<article class="card"><div class="k">2 · Ángel de tu edad</div><div class="name">Aún no llega</div><div class="q">El ángel de la edad llega con el primer cumpleaños.</div></article>`;
+  }else{
+    let n=ag; while(n>72) n-=72;
+    const a2=A[n-1];
+    html+=card("2 · Ángel de tu edad",a2, ag>72?`Tienes ${ag} años. Como pasas de 72, se resta 72: ${n}.`:`Tienes ${ag} años: te acompaña el ángel ${n}. Cambia en tu próximo cumpleaños.`);
+  }
+  const a3=A[sum-1];
+  html+=card("3 · Ángel de tu vida",a3,`${digits.join(" + ")} = <b>${sum}</b><br>Se conservan los dos dígitos.`);
+  $("g").innerHTML=html;
+}
+
+function todayAngel(){
+  const t=new Date(), a=byDate(t.getMonth()+1,t.getDate());
+  $("today").innerHTML=`<div class="num">${a.n}</div><div class="t"><div class="k">Hoy, ${t.getDate()} de ${MES[t.getMonth()]}, te acompaña</div><div class="name">${esc(a.nm)}</div><p>«${esc(a.k)}» · página ${a.p}</p></div>`;
+}
+$("f").addEventListener("submit",run);
+run(); todayAngel();
+</script>
